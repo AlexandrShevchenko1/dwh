@@ -123,3 +123,4 @@ FROM airports a;
 
 I populated db with sample data and run the `SELECT * FROM airport_passenger_traffic;`. Script and replication were working as expected.
 
+Some lines of code to enable replication used from course on YT https://www.youtube.com/playlist?list=PLHq1uqvAteVsnMSMVp-Tcb0MSBVKQ7GLg
