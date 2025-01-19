@@ -1,0 +1,44 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: postgres_1
+    restart: unless-stopped
+    networks:
+      - postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: bookingdb
+      PGDATA: /data
+    volumes: 
+      - ./postgres_1/pgdata:/data
+      - ./postgres_1/config:/config
+      - ./postgres_1/archive:/mnt/server/archive
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    ports:
+      - "5000:5432"
+    command: -c 'config_file=/config/postgresql.conf'
+
+  replica:
+    image: postgres:15-alpine
+    container_name: postgres_2
+    restart: unless-stopped
+    networks:
+      - postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: bookingdb
+      PGDATA: /data
+    volumes: 
+      - ./postgres_2/pgdata:/data
+      - ./postgres_2/config:/config
+      - ./postgres_2/archive:/mnt/server/archive
+    ports:
+      - "5001:5432"
+    command: -c 'config_file=/config/postgresql.conf'
+
+networks:
+  postgres:
+    name: postgres
